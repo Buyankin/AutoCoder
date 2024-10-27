@@ -1,14 +1,31 @@
-name: Workflow Name
+name: Access Issue Information
 
-# Trigger on push events
-on: push
+# Trigger on issue open or reopen events
+on:
+  issues:
+    types: [opened, reopened]
 
 jobs:
-  job_name:
+  access_issue_info:
     runs-on: ubuntu-latest
+
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Greeting Message
-        run: echo "Hello, world"
+      # Step 2: Set environment variables for issue details
+      - name: Set Issue Information
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_ASSIGNEES: ${{ join(github.event.issue.assignees.*.login, ', ') }}
+          ISSUE_LABELS: ${{ join(github.event.issue.labels.*.name, ', ') }}
+        run: |
+          # Echo each issue detail
+          echo "Issue Number: $ISSUE_NUMBER"
+          echo "Issue Title: $ISSUE_TITLE"
+          echo "Issue Body: $ISSUE_BODY"
+          echo "Issue Assignees: $ISSUE_ASSIGNEES"
+          echo "Issue Labels: $ISSUE_LABELS"
