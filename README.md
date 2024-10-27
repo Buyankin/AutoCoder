@@ -1,10 +1,9 @@
-AutoCoder/                   # Root directory of the project
-    │
-    ├── .github/                 # Hidden directory for GitHub-specific files
-    │   └── workflows/           # Directory for GitHub Actions workflow files
-    │       └── main.yml         # Contains workflow file main.yml (empty for now)
-    │
-    ├── scripts/                 # Directory for custom scripts
-    │   └── script.sh            # Bash script to interact with ChatGPT (empty for now)
-    │
-    └── README.md                # Project description file
+# AutoCoder
+
+**AutoCoder** is an automated code generation tool designed to speed up the software development process by generating boilerplate code, templates, and other repetitive structures based on issues and predefined patterns.
+
+## Features
+
+- **Code Templates**: Jumpstart your projects with a variety of language-specific templates.
+- **Customizable Generation**: Tailor the generated code to your specific needs by specifying your prompt as a GitHub Issue.
+- **Integration Support**: Works as part of your CI/CD pipeline using workflows with GitHub Actions.
