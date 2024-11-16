@@ -1,67 +1,50 @@
-name: Access Issue Information
+name: Autocoder Workflow
 
-# Trigger on issue open or reopen events
 on:
   issues:
-    types:
-      - opened
-      - reopened
-      - labeled
+    types: [opened, reopened, labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
-#  access_issue_info:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      # Step 1: Checkout the repository
-#      - name: Checkout Code
-#        uses: actions/checkout@v2
-#
-#      # Step 2: Set environment variables for issue details
-#      - name: Set Issue Information
-#        env:
-#          ISSUE_NUMBER: ${{ github.event.issue.number }}
-#          ISSUE_TITLE: ${{ github.event.issue.title }}
-#          ISSUE_BODY: ${{ github.event.issue.body }}
-#          ISSUE_ASSIGNEES: ${{ join(github.event.issue.assignees.*.login, ', ') }}
-#          ISSUE_LABELS: ${{ join(github.event.issue.labels.*.name, ', ') }}
-#        run: |
-#          # Echo each issue detail
-#          echo "Issue Number: $ISSUE_NUMBER"
-#          echo "Issue Title: $ISSUE_TITLE"
-#          echo "Issue Body: $ISSUE_BODY"
-#          echo "Issue Assignees: $ISSUE_ASSIGNEES"
-#          echo "Issue Labels: $ISSUE_LABELS"
-  autocoder-job:
+  process_issue:
     if: contains(github.event.issue.labels.*.name, 'autocoder-bot')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Make the script executable
+      - name: Configure git settings
+        run: |
+          git config user.name "autocoder-bot"
+          git config user.email "actions@github.com"
+
+      - name: Make script executable
         run: chmod +x ./scripts/script.sh
 
-      - name: Run the autocoder script
+      - name: Run script
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPOSITORY: ${{ github.repository }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: ./scripts/script.sh
+
+      - name: Commit generated code
         run: |
-          ./scripts/script.sh $GITHUB_TOKEN $REPOSITORY $ISSUE_NUMBER $OPENAI_API_KEY
+          BRANCH_NAME="autocoder-branch-${{ github.event.issue.number }}"
+          git checkout -b "$BRANCH_NAME"
+          git add .
+          git commit -m "Generated code for issue #${{ github.event.issue.number }}"
+          git push origin "$BRANCH_NAME"
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v4
         with:
-          name: autocoder-artifact
-          path: autocoder-bot/
-
-      - name: Download artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: autocoder-artifact
-          path: autocoder-artifact/
-
-      - name: List downloaded files
-        run: ls -R autocoder-artifact/
+          branch: "autocoder-branch-${{ github.event.issue.number }}"
+          base: "main"
+          title: "Generated code for issue #${{ github.event.issue.number }}"
+          body: "This pull request contains code generated for issue #${{ github.event.issue.number }}."
+          labels: "autocoder-bot"
