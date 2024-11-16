@@ -3,7 +3,10 @@ name: Access Issue Information
 # Trigger on issue open or reopen events
 on:
   issues:
-    types: [opened, reopened]
+    types:
+      - opened
+      - reopened
+      - labeled
 
 jobs:
   access_issue_info:
