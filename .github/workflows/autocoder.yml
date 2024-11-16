@@ -2,7 +2,8 @@ name: Autocoder Workflow
 
 on:
   issues:
-    types: [labeled]
+    types:
+      - labeled
 
 jobs:
   autocoder-job:
