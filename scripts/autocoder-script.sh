@@ -5,8 +5,8 @@ set -e
 
 # Get inputs from the environment
 GITHUB_TOKEN="$1"
-REPOSITORY="$2" AutoCoder
-ISSUE_NUMBER="$3" 2
+REPOSITORY="$2"
+ISSUE_NUMBER="$3"
 OPENAI_API_KEY="$4"
 
 # Function to fetch issue details from GitHub API
