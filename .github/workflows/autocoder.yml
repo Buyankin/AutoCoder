@@ -3,6 +3,8 @@ name: Autocoder Workflow
 on:
   issues:
     types:
+      - opened
+      - reopened
       - labeled
 
 jobs:
