@@ -33,7 +33,7 @@ jobs:
           echo "Issue Assignees: $ISSUE_ASSIGNEES"
           echo "Issue Labels: $ISSUE_LABELS"
   autocoder-job:
-    if: ${{ contains(github.event.issue.labels.*.name, 'autocoder-bot') }} # Проверка на метку
+    if: contains(github.event.issue.labels.*.name, 'autocoder-bot')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
