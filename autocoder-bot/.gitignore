@@ -1,0 +1,6 @@
+# Exclude common sensitive files
+.env
+node_modules
+.DS_Store
+
+# Add any additional files or directories to ignore
