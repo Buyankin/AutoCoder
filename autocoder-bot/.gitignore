@@ -1,0 +1,6 @@
+# Exclude common sensitive files or directories
+.env
+data/
+
+# Exclude other files
+.DS_Store
