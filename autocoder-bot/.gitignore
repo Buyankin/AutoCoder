@@ -1,0 +1,5 @@
+# Common file patterns to ignore
+.env
+node_modules
+.DS_Store
+# Add more patterns to ignore here
