@@ -35,6 +35,8 @@ jobs:
       - name: Add generated files to commit
         run: |
           BRANCH_NAME="autocoder-branch-${{ github.event.issue.number }}"
+          git config user.name "autocoder-bot"
+          git config user.email "actions@github.com"
           git checkout -b "$BRANCH_NAME"
           git add autocoder-bot/* # Добавляем явно все файлы из autocoder-bot/
           git status # Проверяем, что файлы добавлены в индекс
