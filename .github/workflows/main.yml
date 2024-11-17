@@ -43,7 +43,7 @@ jobs:
         run: |
           BRANCH_NAME="autocoder-branch-${{ github.event.issue.number }}"
           git checkout -b "$BRANCH_NAME"
-          git add .
+          git add -A
           git commit -m "Generated code for issue #${{ github.event.issue.number }}"
           git push origin "$BRANCH_NAME"
 
