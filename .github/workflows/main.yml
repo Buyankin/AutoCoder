@@ -46,6 +46,10 @@ jobs:
           git commit --author="autocoder-bot <actions@github.com>" -m "Generated code for issue #${{ github.event.issue.number }}"
           git push origin "$BRANCH_NAME"
 
+      - name: Amend Commit Author
+        run: |
+          git commit --amend --author="autocoder-bot <actions@github.com>" --no-edit
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
@@ -56,3 +60,4 @@ jobs:
           body: "This pull request contains the generated code."
           labels: "autocoder-bot"
           committer: autocoder-bot <actions@github.com>
+          author: autocoder-bot <actions@github.com>
