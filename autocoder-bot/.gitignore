@@ -1,0 +1,7 @@
+# Exclude common sensitive files or directories
+.env
+data/
+
+# Exclude other files that shouldn't be committed
+.DS_Store
+logs/
