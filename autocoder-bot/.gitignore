@@ -1,0 +1,5 @@
+# Exclude common sensitive files or directories
+.env
+node_modules
+.DS_Store
+# Add any other files that shouldn't be committed here
