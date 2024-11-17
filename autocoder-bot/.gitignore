@@ -1,0 +1,8 @@
+# Exclude common sensitive files
+.env
+
+# Exclude directories
+node_modules
+
+# Exclude system files
+.DS_Store
