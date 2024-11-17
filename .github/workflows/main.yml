@@ -21,9 +21,6 @@ jobs:
           git config user.name "autocoder-bot"
           git config user.email "actions@github.com"
 
-      - name: Debug File Location
-        run: ls -l ./scripts
-
       - name: Make script executable
         run: chmod +x ./scripts/script.sh
 
@@ -33,11 +30,7 @@ jobs:
           REPOSITORY: ${{ github.repository }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          ./scripts/script.sh $GITHUB_TOKEN $REPOSITORY $ISSUE_NUMBER $OPENAI_API_KEY
-
-      - name: Debug Generated Files
-        run: ls -R autocoder-bot/
+        run: ./scripts/script.sh $GITHUB_TOKEN $REPOSITORY $ISSUE_NUMBER $OPENAI_API_KEY
 
       - name: Add generated files to commit
         run: |
@@ -45,11 +38,8 @@ jobs:
           git checkout -b "$BRANCH_NAME"
           git add autocoder-bot/* # Добавляем явно все файлы из autocoder-bot/
           git status # Проверяем, что файлы добавлены в индекс
-          git commit -m "Generated code for issue #${{ github.event.issue.number }}"
+          git commit --author="autocoder-bot <actions@github.com>" -m "Generated code for issue #${{ github.event.issue.number }}"
           git push origin "$BRANCH_NAME"
-
-      - name: Debug Git Status
-        run: git status
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
@@ -60,3 +50,4 @@ jobs:
           title: "Generated code for issue #${{ github.event.issue.number }}"
           body: "This pull request contains the generated code."
           labels: "autocoder-bot"
+          committer: autocoder-bot <actions@github.com>
