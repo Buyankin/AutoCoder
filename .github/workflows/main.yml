@@ -21,6 +21,9 @@ jobs:
           git config user.name "autocoder-bot"
           git config user.email "actions@github.com"
 
+      - name: Debug File Location
+        run: ls -l ./scripts
+
       - name: Make script executable
         run: chmod +x ./scripts/script.sh
 
