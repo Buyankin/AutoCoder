@@ -53,7 +53,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.MY_PERSONAL_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           branch: autocoder-branch-${{ github.event.issue.number }}
           base: main
           title: "Generated code for issue #${{ github.event.issue.number }}"
