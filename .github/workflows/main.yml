@@ -27,13 +27,14 @@ jobs:
       - name: Make script executable
         run: chmod +x ./scripts/script.sh
 
-      - name: Run script
+      - name: Run the autocoder script
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPOSITORY: ${{ github.repository }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: ./scripts/script.sh
+        run: |
+          ./scripts/script.sh $GITHUB_TOKEN $REPOSITORY $ISSUE_NUMBER $OPENAI_API_KEY
 
       - name: Commit generated code
         run: |
