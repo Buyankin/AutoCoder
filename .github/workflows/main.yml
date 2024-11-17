@@ -39,11 +39,11 @@ jobs:
       - name: Debug Generated Files
         run: ls -R autocoder-bot/
 
-      - name: Commit generated code
+      - name: Add generated files to commit
         run: |
           BRANCH_NAME="autocoder-branch-${{ github.event.issue.number }}"
           git checkout -b "$BRANCH_NAME"
-          git add . # Add all changes
+          git add autocoder-bot/* # Add all generated files
           git commit -m "Generated code for issue #${{ github.event.issue.number }}"
           git push origin "$BRANCH_NAME"
 
@@ -56,8 +56,11 @@ jobs:
           branch: autocoder-branch-${{ github.event.issue.number }}
           base: main
           title: "Generated code for issue #${{ github.event.issue.number }}"
-          body: "This pull request contains the generated code."
+          body: |
+            This pull request contains the generated code for issue #${{ github.event.issue.number }}.
+            Files included:
+            - .gitignore
+            - LICENSE
+            - README.md
+            - main.py
           labels: "autocoder-bot"
-
-      - name: Check Autocoder Bot Directory
-        run: ls -R autocoder-bot/
