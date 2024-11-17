@@ -16,10 +16,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Configure git settings
+      - name: Configure Git Global User
         run: |
-          git config user.name "autocoder-bot"
-          git config user.email "actions@github.com"
+          git config --global user.name "autocoder-bot"
+          git config --global user.email "actions@github.com"
 
       - name: Make script executable
         run: chmod +x ./scripts/script.sh
@@ -32,11 +32,14 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: ./scripts/script.sh $GITHUB_TOKEN $REPOSITORY $ISSUE_NUMBER $OPENAI_API_KEY
 
+      - name: Verify Git Configuration
+        run: git config --list
+
       - name: Add generated files to commit
         run: |
           BRANCH_NAME="autocoder-branch-${{ github.event.issue.number }}"
-          git config user.name "autocoder-bot"
-          git config user.email "actions@github.com"
+          git config --global user.name "autocoder-bot"
+          git config --global user.email "actions@github.com"
           git checkout -b "$BRANCH_NAME"
           git add autocoder-bot/* # Добавляем явно все файлы из autocoder-bot/
           git status # Проверяем, что файлы добавлены в индекс
