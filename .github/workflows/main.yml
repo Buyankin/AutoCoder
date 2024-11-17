@@ -36,19 +36,25 @@ jobs:
         run: |
           ./scripts/script.sh $GITHUB_TOKEN $REPOSITORY $ISSUE_NUMBER $OPENAI_API_KEY
 
+      - name: Debug Generated Files
+        run: ls -R autocoder-bot/
+
       - name: Commit generated code
         run: |
           BRANCH_NAME="autocoder-branch-${{ github.event.issue.number }}"
           git checkout -b "$BRANCH_NAME"
-          git add .
+          git add autocoder-bot/* # Make sure to stage all generated files
           git commit -m "Generated code for issue #${{ github.event.issue.number }}"
           git push origin "$BRANCH_NAME"
 
-      - name: Create pull request
-        uses: peter-evans/create-pull-request@v4
+      - name: Debug Git Status
+        run: git status
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
         with:
-          branch: "autocoder-branch-${{ github.event.issue.number }}"
-          base: "main"
+          branch: autocoder-branch-${{ github.event.issue.number }}
+          base: main
           title: "Generated code for issue #${{ github.event.issue.number }}"
-          body: "This pull request contains code generated for issue #${{ github.event.issue.number }}."
+          body: "This pull request contains the generated code."
           labels: "autocoder-bot"
